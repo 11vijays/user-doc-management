@@ -68,9 +68,14 @@ export class User extends Model<User> {
   @BeforeCreate
   @BeforeUpdate
   static async hashPassword(user: User) {
-    if (user.password) {
+    const plainPassword = user.getDataValue('password');
+    if (!plainPassword) return;
+
+    if (user.changed('password')) {
       const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(user.password, salt);
+      const hashedPassword = await bcrypt.hash(plainPassword, salt);
+
+      user.setDataValue('password', hashedPassword);
     }
   }
 }

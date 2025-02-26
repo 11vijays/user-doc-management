@@ -1,4 +1,3 @@
-// src/users/entities/user.entity.ts
 import {
   Table,
   Column,
@@ -7,7 +6,6 @@ import {
   BeforeCreate,
   BeforeUpdate,
   PrimaryKey,
-  HasMany,
 } from 'sequelize-typescript';
 import * as bcrypt from 'bcrypt';
 
@@ -60,14 +58,6 @@ export class User extends Model<User> {
     allowNull: true,
   })
   phone: string;
-
-  @PrimaryKey
-  @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
-    field: 'user_id',
-  })
-  userId: string;
 
   @Column({
     type: DataType.STRING,

@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString, IsEmail, IsPhoneNumber } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  IsPhoneNumber,
+  IsOptional,
+  IsIn,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -13,8 +20,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   firstName: string;
 
-  @IsNotEmpty()
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsString()
@@ -22,8 +29,14 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty()
-  @IsString()
-  roles: string;
+  @IsIn(['admin', 'editor', 'viewer'])
+  role: 'admin' | 'editor' | 'viewer';
 
+  @IsOptional()
+  @IsPhoneNumber('IN') // Validates phone numbers globally
   phone?: string;
+
+  @IsOptional()
+  @IsString()
+  tokenVersion?: string;
 }

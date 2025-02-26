@@ -1,26 +1,61 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectModel } from '@nestjs/sequelize';
+import { User } from './entities/user.entity';
+import { handlePromise } from 'src/utils/error/promise-handler';
+import { serveBadResponse, serveResponse } from 'src/utils/helpers';
+import { HTTP_METHODS } from 'src/utils/constant';
+import { ApiResponse } from 'src/utils/types';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  private readonly entityName = 'User';
+
+  constructor(
+    @InjectModel(User)
+    private user: typeof User,
+  ) {}
+  async create(createUserDto: CreateUserDto): Promise<ApiResponse<User>> {
+    const promise = this.user.create(createUserDto as User);
+    const data = await handlePromise(promise);
+    return serveResponse(HTTP_METHODS.CREATE, this.entityName, data);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(): Promise<ApiResponse<User[]>> {
+    const promise = this.user.findAll();
+    const data = await handlePromise(promise);
+    return serveResponse(HTTP_METHODS.FETCH, this.entityName, data);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string): Promise<ApiResponse<User | null>> {
+    const promise = this.user.findByPk(id);
+    const user = await handlePromise(promise);
+    if (!user) {
+      return serveBadResponse(this.entityName);
+    }
+    return serveResponse(HTTP_METHODS.FETCH, this.entityName, user);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    if (!user?.success) {
+      return serveBadResponse(this.entityName);
+    }
+    const promise = this.user.update(updateUserDto, {
+      where: { id: id },
+    });
+    const data = await handlePromise(promise);
+    return serveResponse(HTTP_METHODS.MODIFY, this.entityName, data);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.findOne(id);
+    if (!user?.success) {
+      return serveBadResponse(this.entityName);
+    }
+    const promise = this.user.destroy({ where: { id: id } });
+    const data = await handlePromise(promise);
+    return serveResponse(HTTP_METHODS.DELETE, this.entityName, data);
   }
 }

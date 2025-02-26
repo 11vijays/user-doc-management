@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  healthCheck(): string {
-    return 'server is healthy';
+  healthCheck() {
+    return { message: 'server is healthy', success: true };
   }
 }

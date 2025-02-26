@@ -3,10 +3,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
-import { handlePromise } from 'src/utils/error/promise-handler';
-import { serveBadResponse, serveResponse } from 'src/utils/helpers';
-import { HTTP_METHODS } from 'src/utils/constant';
-import { ApiResponse } from 'src/utils/types';
+import { handlePromise } from '../utils/error/promise-handler';
+import { serveBadResponse, serveResponse } from '../utils/helpers';
+import { HTTP_METHODS } from '../utils/constant';
+import { ApiResponse } from '../utils/types';
 
 @Injectable()
 export class UserService {
@@ -57,5 +57,10 @@ export class UserService {
     const promise = this.user.destroy({ where: { id: id } });
     const data = await handlePromise(promise);
     return serveResponse(HTTP_METHODS.DELETE, this.entityName, data);
+  }
+
+  async findByEmail(id: string) {
+    const promise = this.user.findOne({ where: { email: id } });
+    return await handlePromise(promise);
   }
 }

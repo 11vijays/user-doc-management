@@ -1,18 +1,36 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
+import { getModelToken } from '@nestjs/sequelize';
+import { User } from './entities/user.entity';
 
 describe('UserService', () => {
-  let service: UserService;
+  let userService: UserService;
+  let userRepository: typeof User;
 
   beforeEach(async () => {
+    const mockUserRepository = {
+      findOne: jest.fn(),
+      findAll: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      destroy: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService],
+      providers: [
+        UserService,
+        {
+          provide: getModelToken(User),
+          useValue: mockUserRepository,
+        },
+      ],
     }).compile();
 
-    service = module.get<UserService>(UserService);
+    userService = module.get<UserService>(UserService);
+    userRepository = module.get<typeof User>(getModelToken(User));
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(userService).toBeDefined();
   });
 });

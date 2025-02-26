@@ -15,8 +15,11 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('server is healthy!"', () => {
+      expect(appController.checkHealth()).toStrictEqual({
+        message: 'server is healthy',
+        success: true,
+      });
     });
   });
 });

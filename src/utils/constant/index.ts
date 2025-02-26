@@ -14,3 +14,9 @@ export const HTTP_METHODS = {
   DELETE: 'DELETE',
   FETCH: 'GET',
 };
+
+export const AUTH_MESSAGE = {
+  USER_NOT_EXIST:
+    'Invalid email or password. Please check your credentials and try again.',
+  LOGOUT: 'User Logged out successfully',
+};

@@ -12,10 +12,10 @@ import {
 } from '@nestjs/common';
 import { IngestionService } from './ingestion.service';
 import { CreateIngestionDto } from './dto/create-ingestion.dto';
-import { JwtAuthGuard } from 'src/auth/auth.gaurd';
-import { RoleGaurd } from 'src/auth/role.gaurd';
-import { Roles } from 'src/decorators';
-import { UserRole } from 'src/utils/constant';
+import { JwtAuthGuard } from '../auth/auth.gaurd';
+import { RoleGaurd } from '../auth/role.gaurd';
+import { Roles } from '../decorators';
+import { UserRole } from '../utils/constant';
 
 @Controller('ingestion')
 @UseGuards(JwtAuthGuard, RoleGaurd)

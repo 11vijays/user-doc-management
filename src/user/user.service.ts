@@ -63,4 +63,12 @@ export class UserService {
     const promise = this.user.findOne({ where: { email: id } });
     return await handlePromise(promise);
   }
+
+  async updateTokenVersion(id: number) {
+    const promise = this.user.increment('tokenVersion', {
+      by: 1,
+      where: { id: id },
+    });
+    return await handlePromise(promise);
+  }
 }

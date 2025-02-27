@@ -77,8 +77,8 @@ nestjs-backend/
 │   ├── utils/            # Utility files (constants, decorators, error handling)
 │   ├── main.ts           # Entry point
 │   ├── app.module.ts     # Root module
-│── seeders/              # ✅ Seeding scripts directory
-│   ├── seeder.ts         # ✅ Bulk seeding script
+│── seeders/              # ""Seeding scripts directory
+│   ├── seeder.ts         # ""Bulk seeding script
 │── uploads/              # Storage for uploaded documents
 │── .env                  # Environment variables
 │── README.md             # Project documentation
@@ -132,17 +132,17 @@ To insert **1000+ Users and 100,000+ Documents**:
 npx ts-node seeders/seeder.ts
 ```
 
-✅ **Expected Output:**
+**Expected Output:**
 
 ```
 📌 Starting Database Seeding...
 🌱 Seeding Users...
-✅ 1000 Users Created
+""1000 Users Created
 🌱 Seeding Documents...
-✅ 10000 Documents Seeded...
-✅ 50000 Documents Seeded...
-✅ 100000 Documents Created
-✅ Database Seeding Completed!
+""10000 Documents Seeded...
+""50000 Documents Seeded...
+""100000 Documents Created
+""Database Seeding Completed!
 ```
 
 ### **6️⃣ Start the Server**

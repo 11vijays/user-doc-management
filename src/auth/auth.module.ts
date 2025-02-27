@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { JwtStrategy } from './jwt.strategy';
 import { RoleGaurd } from './role.gaurd';
-import rateLimit from 'express-rate-limit'; // ✅ Use default import
+import rateLimit from 'express-rate-limit'; //Use default import
 
 dotenv.config();
 

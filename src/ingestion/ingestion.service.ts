@@ -83,7 +83,7 @@ export class IngestionService {
       return serveBadResponse(this.entity);
     }
     return serveResponse(HTTP_METHODS.FETCH, this.entity, {
-      status: ingestion?.data?.dataValues.status,
+      status: ingestion?.data?.status,
     });
   }
 

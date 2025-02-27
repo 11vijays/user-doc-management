@@ -90,10 +90,7 @@ nestjs-backend/
 
 ### **1️⃣ Clone the Repository**
 
-```sh
-git clone https://github.com/your-repo/nestjs-backend.git
-cd nestjs-backend
-```
+using git clone command
 
 ### **2️⃣ Install Dependencies**
 

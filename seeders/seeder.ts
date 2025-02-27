@@ -9,7 +9,7 @@ import { CreateDocumentDto } from '../src/document/dto/create-document.dto';
 import { UserRole } from '../src/utils/constant';
 import * as faker from '@faker-js/faker';
 
-// ✅ Load environment variables
+//Load environment variables
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 async function seedDatabase() {
@@ -38,8 +38,8 @@ async function seedDatabase() {
       tokenVersion: 1,
     });
   }
-  await userService.bulkCreate(users); // ✅ Bulk insert users
-  console.log('✅ 1000 Users Created');
+  await userService.bulkCreate(users);
+  console.log('1000 Users Created');
 
   // 🌱 Bulk Insert Documents
   console.log('🌱 Seeding Documents...');
@@ -54,13 +54,13 @@ async function seedDatabase() {
     // Insert in batches of 10,000
     if (i > 0 && i % 10000 === 0) {
       await documentService.bulkCreate(documents);
-      console.log(`✅ ${i} Documents Seeded...`);
+      console.log(`${i} Documents Seeded...`);
       documents.length = 0; // Clear the array for the next batch
     }
   }
 
   await app.close();
-  console.log('✅ Database Seeding Completed!');
+  console.log('Database Seeding Completed!');
 }
 
 seedDatabase();

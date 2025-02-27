@@ -25,7 +25,8 @@ export class AuthService {
     const promise = this.userService.findByEmail(email);
     const data = await handlePromise(promise);
     const user = data?.dataValues;
-    if (user && (await bcrypt.compare(password, user.password))) {
+    const isPasswordMatched = await bcrypt.compare(password, user?.password!);
+    if (user && isPasswordMatched) {
       return user;
     }
     return null;

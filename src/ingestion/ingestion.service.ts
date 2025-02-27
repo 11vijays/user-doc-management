@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { UpdateIngestionDto } from './dto/update-ingestion.dto';
 import { IngestionProcess } from './entities/ingestion.entity';
 import { InjectModel } from '@nestjs/sequelize';
-import { handlePromise } from 'src/utils/error/promise-handler';
+import { handlePromise } from '../utils/error/promise-handler';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
-import { serveBadResponse, serveResponse } from 'src/utils/helpers';
-import { HTTP_METHODS } from 'src/utils/constant';
+import { serveBadResponse, serveResponse } from '../utils/helpers';
+import { HTTP_METHODS } from '../utils/constant';
 import { INGESTION_MESSAGE, IngestionStatus } from './dto/create-ingestion.dto';
 
 const pythonURI = 'https://jsonplaceholder.typicode.com/posts';

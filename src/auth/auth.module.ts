@@ -5,6 +5,7 @@ import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { JwtStrategy } from './jwt.strategy';
+import { RoleGaurd } from './role.gaurd';
 
 dotenv.config();
 
@@ -17,6 +18,6 @@ dotenv.config();
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, RoleGaurd],
 })
 export class AuthModule {}

@@ -60,10 +60,10 @@ export class User extends Model<User> {
   phone: string;
 
   @Column({
-    type: DataType.STRING,
-    defaultValue: 'v1',
+    type: DataType.INTEGER,
+    defaultValue: 1,
   })
-  tokenVersion: string;
+  tokenVersion: number;
 
   @BeforeCreate
   @BeforeUpdate

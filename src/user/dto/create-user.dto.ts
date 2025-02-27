@@ -5,6 +5,7 @@ import {
   IsPhoneNumber,
   IsOptional,
   IsIn,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -33,10 +34,10 @@ export class CreateUserDto {
   role: 'admin' | 'editor' | 'viewer';
 
   @IsOptional()
-  @IsPhoneNumber('IN') // Validates phone numbers globally
+  @IsPhoneNumber('IN')
   phone?: string;
 
   @IsOptional()
-  @IsString()
-  tokenVersion?: string;
+  @IsNumber()
+  tokenVersion?: number;
 }

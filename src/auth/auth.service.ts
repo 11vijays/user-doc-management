@@ -7,6 +7,8 @@ import * as bcrypt from 'bcrypt';
 import { CustomBadException } from '../utils/error/error-handler';
 import { AUTH_MESSAGE } from '../utils/constant';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { ApiResponse } from '../utils/types';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +16,10 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
+
+  async create(createUserDto: CreateUserDto): Promise<ApiResponse<User>> {
+    return await this.userService.create(createUserDto);
+  }
 
   async validateUser(email: string, password: string): Promise<User | null> {
     const promise = this.userService.findByEmail(email);
@@ -36,8 +42,14 @@ export class AuthService {
     const payload = {
       user: user?.email,
       sub: user?.id,
+      version: user?.tokenVersion,
     };
     const access_token = this.jwtService.sign(payload);
     return access_token;
+  }
+
+  async logout(id: number) {
+    await this.userService.updateTokenVersion(id);
+    return { sucess: true, message: AUTH_MESSAGE.LOGOUT };
   }
 }

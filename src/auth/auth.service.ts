@@ -31,7 +31,7 @@ export class AuthService {
     return null;
   }
 
-  async login(userCred: CreateAuthDto) {
+  async login(userCred: CreateAuthDto): Promise<string> {
     const user = await this.validateUser(userCred.email, userCred.password);
     if (!user) {
       throw new CustomBadException(
@@ -48,8 +48,8 @@ export class AuthService {
     return access_token;
   }
 
-  async logout(id: number) {
+  async logout(id: number): Promise<ApiResponse<null>> {
     await this.userService.updateTokenVersion(id);
-    return { sucess: true, message: AUTH_MESSAGE.LOGOUT };
+    return { success: true, message: AUTH_MESSAGE.LOGOUT };
   }
 }

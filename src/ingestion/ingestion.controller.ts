@@ -29,6 +29,7 @@ export class IngestionController {
     return this.ingestionService.triggerIngestion(createIngestionDto.source);
   }
 
+  @Roles(UserRole.ADMIN)
   @Get('/fetch/:id')
   async getIngestion(@Param('id') id: string) {
     return this.ingestionService.getIngestionById(+id);

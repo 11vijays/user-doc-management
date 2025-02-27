@@ -1,99 +1,201 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# **NestJS Backend: User Management, Document Management, and Ingestion APIs**
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## **📌 Project Overview**
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This project is a **backend service** built using **NestJS** for managing:
 
-## Description
+- **User Authentication & Role-Based Access Control (RBAC)**
+- **Document Management (CRUD + Uploads with Role Restrictions)**
+- **Ingestion Process Control (Trigger & Management with RBAC)**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## **🚀 Key Features & APIs**
 
-## Project setup
+### **1️⃣ Authentication & Role-Based Access Control (RBAC)**
 
-```bash
-$ npm install
+- **Register** new users.
+- **Login** and receive JWT tokens.
+- **Logout** by invalidating tokens.
+- **RBAC with `admin`, `editor`, and `viewer` roles.**
+
+### **2️⃣ User Management APIs (RBAC)**
+
+- **Admin-only functionality** to manage users.
+- **Update user roles and permissions (Admin).**
+- **View all registered users (Admin, Editor, Viewer only).**
+
+### **3️⃣ Document Management APIs (RBAC)**
+
+- **Upload Documents (Admin, Editor only).**
+- **CRUD operations for document handling (Admin, Editor only).**
+- **Users can fetch documents (Viewer role).**
+- **Serve static files using `ServeStaticModule`.**
+
+### **4️⃣ Ingestion Trigger API (RBAC: Admin Only)**
+
+- **Trigger the ingestion process** in an external Python service(fow now with mock api).
+- **Send requests to a dummy online API** for testing.
+- **Log ingestion requests and their statuses.**
+
+### **5️⃣ Ingestion Management API (RBAC: Admin Only)**
+
+- **Track ongoing ingestion processes.**
+- **Monitor status updates (pending, in-progress, completed, failed).**
+
+### **6️⃣ Bulk Seeding API**
+
+- **Seed large datasets with Users & Documents efficiently.**
+- **Use `bulkCreate()` for batch inserts.**
+- **Seeding script to insert 1000+ users and 100,000+ documents.**
+
+---
+
+## **🛠️ Tech Stack & Tools**
+
+| **Technology**        | **Purpose**                     |
+| --------------------- | ------------------------------- |
+| **NestJS**            | Backend framework               |
+| **TypeScript**        | Strict type management          |
+| **PostgreSQL**        | Relational database             |
+| **Sequelize ORM**     | Database ORM for TypeScript     |
+| **JWT**               | Authentication & Authorization  |
+| **RBAC Middleware**   | Role-based access control       |
+| **Multer**            | File upload handling            |
+| **ServeStaticModule** | Serves static files (documents) |
+
+---
+
+## **📂 Project Structure**
+
+```
+nestjs-backend/
+│── src/
+│   ├── auth/             # Authentication & RBAC Module
+│   ├── user/             # User Management Module
+│   ├── document/         # Document Management Module (RBAC Applied)
+│   ├── ingestion/        # Ingestion Management Module (RBAC Applied)
+│   ├── config/           # Configurations (Database, Multer, etc.)
+│   ├── utils/            # Utility files (constants, decorators, error handling)
+│   ├── main.ts           # Entry point
+│   ├── app.module.ts     # Root module
+│── seeders/              # ✅ Seeding scripts directory
+│   ├── seeder.ts         # ✅ Bulk seeding script
+│── uploads/              # Storage for uploaded documents
+│── .env                  # Environment variables
+│── README.md             # Project documentation
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## **⚙️ Setup & Installation**
 
-# watch mode
-$ npm run start:dev
+### **1️⃣ Clone the Repository**
 
-# production mode
-$ npm run start:prod
+```sh
+git clone https://github.com/your-repo/nestjs-backend.git
+cd nestjs-backend
 ```
 
-## Run tests
+### **2️⃣ Install Dependencies**
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```sh
+npm install
 ```
 
-## Deployment
+### **3️⃣ Configure Environment Variables**
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Create a `.env` file and add the necessary values:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
+```
+# Database Configuration
+DB_HOST={{value}}
+DB_PORT={{value}}
+DB_USER={{value}}
+DB_PASS={{value}}
+DB_NAME={{value}}
+APP_PORT={{value}}
+NODE_ENV=development
+JWT_SECRET={{value}}
+EXTERNAL_INGESTION_API={{value}}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### **4️⃣ Run Migrations (If Using Sequelize CLI)**
 
-## Resources
+```sh
+npx sequelize-cli db:migrate
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### **5️⃣ Run Seeder Script (Bulk Data Insertion)**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+To insert **1000+ Users and 100,000+ Documents**:
 
-## Support
+```sh
+npx ts-node seeders/seeder.ts
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+✅ **Expected Output:**
 
-## Stay in touch
+```
+📌 Starting Database Seeding...
+🌱 Seeding Users...
+✅ 1000 Users Created
+🌱 Seeding Documents...
+✅ 10000 Documents Seeded...
+✅ 50000 Documents Seeded...
+✅ 100000 Documents Created
+✅ Database Seeding Completed!
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### **6️⃣ Start the Server**
 
-## License
+```sh
+npm run start:dev
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+## **🔍 API Documentation (RBAC Applied)**
+
+### **Authentication API**
+
+| Method | Endpoint         | Description     |
+| ------ | ---------------- | --------------- |
+| `POST` | `/auth/register` | Register a user |
+| `POST` | `/auth/login`    | Login & get JWT |
+| `GET`  | `/auth/logout`   | Logout user     |
+
+### **User Management API (Admin Only)**
+
+| Method   | Endpoint            | Description                         |
+| -------- | ------------------- | ----------------------------------- |
+| `GET`    | `/user/all`         | List all users (Admin, Editor)      |
+| `GET`    | `/user/fetch/:id`   | Get user details                    |
+| `PATCH`  | `/user/update/:id`  | Update user details (Admin, Editor) |
+| `DELETE` | `/user/delete/:id`  | Remove user (Admin)                 |
+| `POST`   | `/user/bulk-create` | Bulk create users (Admin)           |
+
+### **Document Management API (RBAC Applied)**
+
+| Method   | Endpoint               | Description                                |
+| -------- | ---------------------- | ------------------------------------------ |
+| `POST`   | `/document/upload`     | Upload a document (Admin, Editor)          |
+| `GET`    | `/document/fetch`      | List all documents (Viewer, Editor, Admin) |
+| `GET`    | `/document/fetch/:id`  | Get document details                       |
+| `PATCH`  | `/document/update/:id` | Update document (Admin, Editor)            |
+| `DELETE` | `/document/delete/:id` | Delete document (Admin, Editor)            |
+
+---
+
+## **⚙️ API Documentation (RBAC Applied)**
+
+### **Ingestion API (Admin Only)**
+
+| Method   | Endpoint                | Description                         |
+| -------- | ----------------------- | ----------------------------------- |
+| `POST`   | `/ingestion/trigger`    | Trigger ingestion process           |
+| `GET`    | `/ingestion/fetch/:id`  | Fetch ingestion details             |
+| `POST`   | `/ingestion/webhook`    | Update ingestion status via webhook |
+| `GET`    | `/ingestion/status/:id` | Get ingestion status                |
+| `GET`    | `/ingestion/all`        | List all ingestion processes        |
+| `DELETE` | `/ingestion/delete/:id` | Delete ingestion process            |
+
+---

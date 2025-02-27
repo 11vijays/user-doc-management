@@ -6,12 +6,25 @@ import { InjectModel } from '@nestjs/sequelize';
 import { handlePromise } from '../utils/error/promise-handler';
 import { serveBadResponse, serveResponse } from '../utils/helpers';
 import { HTTP_METHODS } from '../utils/constant';
+import { ApiResponse } from '../utils/types';
 
 @Injectable()
 export class DocumentService {
   private readonly entityName = 'document';
   constructor(@InjectModel(Document) private document: typeof Document) {}
-  async create(createDocumentDto: CreateDocumentDto, userId: number) {
+
+  async bulkCreate(
+    createDocumentDto: CreateDocumentDto[],
+  ): Promise<ApiResponse<Document[]>> {
+    const promise = this.document.bulkCreate(createDocumentDto as Document[]);
+    const data = await handlePromise(promise);
+    return serveResponse(HTTP_METHODS.UPLOAD, this.entityName, data);
+  }
+
+  async create(
+    createDocumentDto: CreateDocumentDto,
+    userId: number,
+  ): Promise<ApiResponse<Document>> {
     const promise = this.document.create({
       ...createDocumentDto,
       userId,
@@ -20,13 +33,13 @@ export class DocumentService {
     return serveResponse(HTTP_METHODS.UPLOAD, this.entityName, data);
   }
 
-  async findAll(id?: number) {
+  async findAll(id?: number): Promise<ApiResponse<Document[]>> {
     const promise = this.document.findAll();
     const data = await handlePromise(promise);
     return serveResponse(HTTP_METHODS.FETCH, this.entityName, data);
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<ApiResponse<Document>> {
     const promise = this.document.findOne({ where: { id: id } });
     const data = await handlePromise(promise);
     if (!data) {
@@ -39,7 +52,7 @@ export class DocumentService {
     id: number,
     updateDocumentDto: UpdateDocumentDto,
     userId: number,
-  ) {
+  ): Promise<ApiResponse<number[]>> {
     const documentExist = await this.findOne(id);
     if (!documentExist.success) {
       return serveBadResponse(this.entityName);
@@ -55,7 +68,7 @@ export class DocumentService {
     return serveResponse(HTTP_METHODS.UPDATE, this.entityName, data);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<ApiResponse<number>> {
     const promise = this.document.destroy({ where: { id: id } });
     const data = await handlePromise(promise);
     return serveResponse(HTTP_METHODS.DELETE, this.entityName, data);

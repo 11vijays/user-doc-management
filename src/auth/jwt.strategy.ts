@@ -5,7 +5,7 @@ import {
   ExtractJwt,
   StrategyOptionsWithoutRequest,
 } from 'passport-jwt';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { JwtPayload } from './dto/create-auth.dto';
 import * as dotenv from 'dotenv';
 import { AUTH_MESSAGE } from '../utils/constant';

@@ -8,8 +8,9 @@ import { lastValueFrom } from 'rxjs';
 import { serveBadResponse, serveResponse } from '../utils/helpers';
 import { HTTP_METHODS } from '../utils/constant';
 import { INGESTION_MESSAGE, IngestionStatus } from './dto/create-ingestion.dto';
+import { ApiResponse } from '../utils/types';
 
-const pythonURI = 'https://jsonplaceholder.typicode.com/posts';
+const pythonURI = process.env.EXTERNAL_INGESTION_API || '';
 
 @Injectable()
 export class IngestionService {
@@ -18,7 +19,9 @@ export class IngestionService {
     @InjectModel(IngestionProcess) private ingestion: typeof IngestionProcess,
     private readonly httpService: HttpService,
   ) {}
-  async triggerIngestion(source: string) {
+  async triggerIngestion(
+    source: string,
+  ): Promise<ApiResponse<IngestionProcess>> {
     const promise = this.ingestion.create({
       source,
       status: IngestionStatus.PENDING,
@@ -41,16 +44,20 @@ export class IngestionService {
         });
       }, 5000);
       return serveResponse(HTTP_METHODS.CREATE, this.entity, ingestion);
-    } catch (error) {
+    } catch (error: any) {
       await ingestion.update({
         status: IngestionStatus.FAILED,
         resultMessage: INGESTION_MESSAGE.FAIL,
       });
-      return { message: INGESTION_MESSAGE.FAIL, error: error.message };
+      return {
+        message: INGESTION_MESSAGE.FAIL,
+        error: error.message,
+        success: false,
+      };
     }
   }
 
-  async getIngestionById(id: number) {
+  async getIngestionById(id: number): Promise<ApiResponse<IngestionProcess>> {
     const ingestion = await this.ingestion.findByPk(id);
     if (!ingestion) {
       return serveBadResponse(this.entity);
@@ -62,7 +69,7 @@ export class IngestionService {
     ingestionId: number,
     status: string,
     resultMessage?: string,
-  ) {
+  ): Promise<ApiResponse<{}>> {
     const ingestion = await this.ingestion.findByPk(ingestionId);
     if (!ingestion) {
       return serveBadResponse(this.entity);
@@ -70,7 +77,7 @@ export class IngestionService {
     await ingestion.update({ status, resultMessage } as IngestionProcess);
     return serveResponse(HTTP_METHODS.UPDATE, this.entity, ingestionId);
   }
-  async getIngestionStatus(id: number) {
+  async getIngestionStatus(id: number): Promise<ApiResponse<{}>> {
     const ingestion = await this.getIngestionById(id);
     if (!ingestion.success) {
       return serveBadResponse(this.entity);
@@ -80,7 +87,7 @@ export class IngestionService {
     });
   }
 
-  async getAllIngestions() {
+  async getAllIngestions(): Promise<ApiResponse<IngestionProcess[]>> {
     const promise = this.ingestion.findAll();
     const data = await handlePromise(promise);
     return serveResponse(HTTP_METHODS.FETCH, this.entity, data);

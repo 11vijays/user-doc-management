@@ -16,6 +16,15 @@ export class UserService {
     @InjectModel(User)
     private user: typeof User,
   ) {}
+  //for seeding only
+  async bulkCreate(
+    createUserDto: CreateUserDto[],
+  ): Promise<ApiResponse<User[]>> {
+    const promise = this.user.bulkCreate(createUserDto as User[]);
+    const data = await handlePromise(promise);
+    return serveResponse(HTTP_METHODS.CREATE, this.entityName, data);
+  }
+
   async create(createUserDto: CreateUserDto): Promise<ApiResponse<User>> {
     const promise = this.user.create(createUserDto as User);
     const data = await handlePromise(promise);
@@ -37,7 +46,10 @@ export class UserService {
     return serveResponse(HTTP_METHODS.FETCH, this.entityName, user);
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<ApiResponse<number[]>> {
     const user = await this.findOne(id);
     if (!user?.success) {
       return serveBadResponse(this.entityName);
@@ -49,7 +61,7 @@ export class UserService {
     return serveResponse(HTTP_METHODS.MODIFY, this.entityName, data);
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<ApiResponse<number>> {
     const user = await this.findOne(id);
     if (!user?.success) {
       return serveBadResponse(this.entityName);
@@ -59,16 +71,17 @@ export class UserService {
     return serveResponse(HTTP_METHODS.DELETE, this.entityName, data);
   }
 
-  async findByEmail(id: string) {
+  async findByEmail(id: string): Promise<User | null> {
     const promise = this.user.findOne({ where: { email: id } });
     return await handlePromise(promise);
   }
 
-  async updateTokenVersion(id: number) {
+  async updateTokenVersion(id: number): Promise<number | undefined> {
     const promise = this.user.increment('tokenVersion', {
       by: 1,
       where: { id: id },
     });
-    return await handlePromise(promise);
+    const [affectedRows, affectedCount] = await handlePromise(promise);
+    return affectedCount;
   }
 }

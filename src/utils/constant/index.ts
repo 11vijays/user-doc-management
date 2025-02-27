@@ -5,6 +5,7 @@ export const ACTIONS: Record<string, string> = {
   DELETE: 'deleted',
   GET: 'retrieved',
   DEFAULT: 'processed',
+  UPLOAD: 'uploaded',
 };
 
 export const HTTP_METHODS = {
@@ -13,6 +14,7 @@ export const HTTP_METHODS = {
   MODIFY: 'PATCH',
   DELETE: 'DELETE',
   FETCH: 'GET',
+  UPLOAD: 'UPLOAD',
 };
 
 export const AUTH_MESSAGE = {

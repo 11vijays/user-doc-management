@@ -15,7 +15,6 @@ export class RoleGaurd implements CanActivate {
       'roles',
       context.getHandler(),
     );
-    console.log(requiredRoles);
     if (!requiredRoles) return true;
     const { user } = context.switchToHttp().getRequest();
     if (!user || !requiredRoles?.includes(user?.role)) {

@@ -9,7 +9,11 @@ import {
 } from 'sequelize-typescript';
 import * as bcrypt from 'bcrypt';
 
-@Table({ tableName: 'users', timestamps: true, underscored: true })
+@Table({
+  tableName: 'users',
+  timestamps: true,
+  underscored: true,
+})
 export class User extends Model<User> {
   @Column({
     type: DataType.STRING,
@@ -17,53 +21,53 @@ export class User extends Model<User> {
     unique: true,
     field: 'user_name',
   })
-  userName: string;
+  userName!: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
     unique: true,
   })
-  email: string;
+  email!: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
     field: 'first_name',
   })
-  firstName: string;
+  firstName!: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
     field: 'last_name',
   })
-  lastName: string;
+  lastName!: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  password: string;
+  password!: string;
 
   @Column({
     type: DataType.ENUM('admin', 'editor', 'viewer'),
     allowNull: false,
     defaultValue: 'viewer',
   })
-  role: 'admin' | 'editor' | 'viewer';
+  role!: 'admin' | 'editor' | 'viewer';
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  phone: string;
+  phone?: string;
 
   @Column({
     type: DataType.INTEGER,
     defaultValue: 1,
   })
-  tokenVersion: number;
+  tokenVersion!: number;
 
   @BeforeCreate
   @BeforeUpdate

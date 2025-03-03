@@ -9,6 +9,7 @@ import {
   Get,
   Req,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
@@ -27,10 +28,10 @@ export class AuthController {
   }
 
   @Post('/login')
+  @HttpCode(200)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  async login(@Body() createAuthDto: CreateAuthDto, @Res() res: Response) {
-    const token = await this.authService.login(createAuthDto);
-    return res.status(HttpStatus.OK).send({ success: true, token });
+  async login(@Body() createAuthDto: CreateAuthDto) {
+    return this.authService.login(createAuthDto);
   }
 
   @Get('/logout')

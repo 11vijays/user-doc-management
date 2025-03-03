@@ -94,6 +94,8 @@ using git clone command
 
 ### **2️⃣ Install Dependencies**
 
+node version --> v20.15.1
+
 ```sh
 npm install
 ```

@@ -5,10 +5,11 @@ import { User } from '../user/entities/user.entity';
 import { handlePromise } from '../utils/error/promise-handler';
 import * as bcrypt from 'bcrypt';
 import { CustomBadException } from '../utils/error/error-handler';
-import { AUTH_MESSAGE } from '../utils/constant';
+import { AUTH_MESSAGE, HTTP_METHODS } from '../utils/constant';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { ApiResponse } from '../utils/types';
+import { serveResponse } from '../utils/helpers';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +33,9 @@ export class AuthService {
     return null;
   }
 
-  async login(userCred: CreateAuthDto): Promise<string> {
+  async login(
+    userCred: CreateAuthDto,
+  ): Promise<ApiResponse<{ token: string }>> {
     const user = await this.validateUser(userCred.email, userCred.password);
     if (!user) {
       throw new CustomBadException(
@@ -46,7 +49,7 @@ export class AuthService {
       version: user?.tokenVersion,
     };
     const access_token = this.jwtService.sign(payload);
-    return access_token;
+    return serveResponse('', 'Auth', { token: access_token });
   }
 
   async logout(id: number): Promise<ApiResponse<null>> {

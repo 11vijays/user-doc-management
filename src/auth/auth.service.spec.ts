@@ -155,7 +155,13 @@ describe('AuthService', () => {
 
       const result = await authService.login(loginDto);
 
-      expect(result).toBe('mocked_jwt_token');
+      expect(result).toEqual({
+        success: true,
+        message: 'Auth processed successfully',
+        data: {
+          token: 'mocked_jwt_token',
+        },
+      });
       expect(jwtService.sign).toHaveBeenCalledWith({
         user: mockUser.email,
         sub: mockUser.id,

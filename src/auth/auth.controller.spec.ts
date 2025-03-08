@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { AUTH_MESSAGE } from '../utils/constant';
-import { Response } from 'express';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -60,20 +59,20 @@ describe('AuthController', () => {
         password: 'Test@1234',
       };
 
-      const mockResponse: Partial<Response> = {
-        status: jest.fn().mockReturnThis(),
-        send: jest.fn(),
+      const expectedResponse = {
+        success: true,
+        message: 'Auth processed successfully',
+        data: {
+          token: 'mocked_jwt_token',
+        },
       };
 
-      const token = 'mocked_jwt_token';
+      mockAuthService.login.mockResolvedValue(expectedResponse);
 
-      mockAuthService.login.mockResolvedValue(token);
-
-      await authController.login(createAuthDto, mockResponse as Response);
+      const result = await authController.login(createAuthDto);
 
       expect(mockAuthService.login).toHaveBeenCalledWith(createAuthDto);
-      expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.send).toHaveBeenCalledWith({ success: true, token });
+      expect(result).toEqual(expectedResponse);
     });
 
     it('should throw an error if login fails', async () => {
@@ -86,9 +85,9 @@ describe('AuthController', () => {
         new Error(AUTH_MESSAGE.USER_NOT_EXIST),
       );
 
-      await expect(
-        authController.login(createAuthDto, {} as Response),
-      ).rejects.toThrow(AUTH_MESSAGE.USER_NOT_EXIST);
+      await expect(authController.login(createAuthDto)).rejects.toThrow(
+        AUTH_MESSAGE.USER_NOT_EXIST,
+      );
     });
   });
 
@@ -96,7 +95,9 @@ describe('AuthController', () => {
     it('should log out a user successfully', async () => {
       const req = { user: { userId: 1 } } as any;
       const expectedResponse = { success: true, message: AUTH_MESSAGE.LOGOUT };
+
       mockAuthService.logout.mockResolvedValue(expectedResponse);
+
       expect(await authController.logout(req)).toEqual(expectedResponse);
       expect(mockAuthService.logout).toHaveBeenCalledWith(1);
     });
